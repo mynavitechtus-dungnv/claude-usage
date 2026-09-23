@@ -8,11 +8,14 @@
 #
 # Biến môi trường:
 #   SWIFTBAR_PLUGIN_DIR   thư mục plugin (mặc định ~/.swiftbar-plugins)
+#   REFRESH               chu kỳ làm mới: 2m, 5m, 10m, 15m, 30m (mặc định giữ lựa chọn cũ, lần đầu là 5m)
 set -euo pipefail
 
 REPO_RAW="https://raw.githubusercontent.com/mynavitechtus-dungnv/claude-usage/main"
 SWIFTBAR_ZIP="https://github.com/swiftbar/SwiftBar/releases/download/v2.1.1/SwiftBar.v2.1.1.b597.zip"
-PLUGIN="claude-usage.2m.py"
+PLUGIN_SRC="claude-usage.py"          # tên file trong repo
+VALID_REFRESH="2m 5m 10m 15m 30m"
+DEFAULT_REFRESH="5m"
 PLUGIN_DIR="${SWIFTBAR_PLUGIN_DIR:-$HOME/.swiftbar-plugins}"
 DEFAULTS_DOMAIN="com.ameba.SwiftBar"   # bundle id của SwiftBar
 KEYCHAIN_SERVICE="Claude Code-credentials"
@@ -46,8 +49,9 @@ restart_swiftbar() {
 # ---------------------------------------------------------------- gỡ cài đặt
 if [[ "${1:-}" == "--uninstall" ]]; then
   current="$(defaults read "$DEFAULTS_DOMAIN" PluginDirectory 2>/dev/null || echo "$PLUGIN_DIR")"
-  if [[ -e "$current/$PLUGIN" || -L "$current/$PLUGIN" ]]; then
-    rm -f "$current/$PLUGIN"
+  found=("$current"/claude-usage.*.py)
+  if [[ -e "${found[0]}" || -L "${found[0]}" ]]; then
+    rm -f "${found[@]}"
     ok "Đã xoá plugin khỏi $current"
   else
     warn "Không thấy plugin trong $current"
@@ -113,17 +117,31 @@ defaults write "$DEFAULTS_DOMAIN" PluginDirectory -string "$PLUGIN_DIR"
 # Hoàn tác: defaults delete com.ameba.SwiftBar StealthMode
 defaults write "$DEFAULTS_DOMAIN" StealthMode -bool true
 
+# Chu kỳ làm mới nằm trong tên file (SwiftBar quy ước). Giữ lựa chọn cũ của người dùng khi cài lại.
+refresh="${REFRESH:-}"
+if [[ -z "$refresh" ]]; then
+  for f in "$PLUGIN_DIR"/claude-usage.*.py; do
+    [[ -e "$f" ]] || continue
+    old="$(basename "$f")"; old="${old#claude-usage.}"; old="${old%.py}"
+    [[ " $VALID_REFRESH " == *" $old "* ]] && refresh="$old"
+  done
+fi
+refresh="${refresh:-$DEFAULT_REFRESH}"
+[[ " $VALID_REFRESH " == *" $refresh "* ]] || fail "REFRESH=$refresh không hợp lệ. Chọn một trong: $VALID_REFRESH"
+PLUGIN="claude-usage.$refresh.py"
+
 # Copy, không symlink: nếu thư mục nguồn nằm trong ~/Documents, ~/Desktop, ~/Downloads
 # thì macOS chặn SwiftBar đọc file qua symlink ("Operation not permitted").
-rm -f "$PLUGIN_DIR/$PLUGIN"
-if [[ -f "$HERE/$PLUGIN" ]]; then
-  install -m 755 "$HERE/$PLUGIN" "$PLUGIN_DIR/$PLUGIN"
+rm -f "$PLUGIN_DIR"/claude-usage.*.py
+if [[ -f "$HERE/$PLUGIN_SRC" ]]; then
+  install -m 755 "$HERE/$PLUGIN_SRC" "$PLUGIN_DIR/$PLUGIN"
   ok "Đã copy plugin từ $HERE"
 else
-  curl -fsSL "$REPO_RAW/$PLUGIN" -o "$PLUGIN_DIR/$PLUGIN"
+  curl -fsSL "$REPO_RAW/$PLUGIN_SRC" -o "$PLUGIN_DIR/$PLUGIN"
   chmod 755 "$PLUGIN_DIR/$PLUGIN"
   ok "Đã tải plugin từ GitHub"
 fi
+ok "Tự làm mới mỗi ${refresh%m} phút (đổi trong menu: Tự làm mới mỗi...)"
 
 if out="$("$PLUGIN_DIR/$PLUGIN" 2>&1)"; then
   ok "Chạy thử: $(printf '%s\n' "$out" | head -1 | sed 's/ |.*//')"

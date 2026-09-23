@@ -1,6 +1,6 @@
 # Claude Usage trên thanh menu macOS
 
-Hiện mức dùng Claude của bạn ngay trên thanh menu, cập nhật mỗi 2 phút.
+Hiện mức dùng Claude của bạn ngay trên thanh menu, tự cập nhật theo chu kỳ bạn chọn (mặc định 5 phút).
 
 ```
 ⚡16% · 42%
@@ -17,6 +17,13 @@ Tuần (Fable)   42%   reset CN 27/09 16:59 (còn 4d 6h)
 ```
 
 Dấu ● đánh dấu giới hạn đang có hiệu lực. Chữ chuyển cam khi sắp chạm giới hạn và đỏ khi đã chạm.
+
+## Đổi thời gian tự làm mới
+
+Bấm vào số trên thanh menu, chọn **Tự làm mới mỗi...**, rồi chọn **2, 5, 10, 15 hoặc 30 phút**.
+Mốc đang dùng có dấu tích. Lựa chọn được giữ nguyên khi cài lại hoặc cập nhật.
+
+Muốn xem số mới ngay mà không đợi, bấm **Làm mới ngay**.
 
 ## Trước khi cài
 
@@ -61,7 +68,7 @@ Thông báo này xuất hiện vì file tải từ Internet chưa được Apple
 | 1 | Kiểm tra Python 3. Nếu máy chưa có Command Line Tools, mở hộp thoại cài của Apple rồi dừng, cài xong chạy lại. |
 | 2 | Kiểm tra Claude Code đã đăng nhập chưa. Chưa thì chỉ cảnh báo, vẫn cài tiếp. |
 | 3 | Cài [SwiftBar](https://swiftbar.app), app miễn phí mã nguồn mở để hiện nội dung lên thanh menu. Dùng Homebrew nếu có, không thì tải bản chính thức v2.1.1 từ GitHub. |
-| 4 | Copy plugin vào `~/.swiftbar-plugins` và ẩn chữ "SwiftBar" trên thanh menu, chỉ để lại số liệu Claude. |
+| 4 | Copy plugin vào `~/.swiftbar-plugins`, giữ chu kỳ làm mới đã chọn trước đó, và ẩn chữ "SwiftBar" trên thanh menu, chỉ để lại số liệu Claude. |
 | 5 | Mở SwiftBar và thêm nó vào Login Items để tự chạy khi bật máy. |
 
 Chạy lại trình cài bao nhiêu lần cũng được. Lần sau chính là cập nhật lên bản mới.
@@ -122,7 +129,16 @@ defaults delete com.ameba.SwiftBar StealthMode
    item `Claude Code-credentials`, field `claudeAiOauth.accessToken`.
 2. Gọi `GET https://api.anthropic.com/api/oauth/usage` với header `anthropic-beta: oauth-2025-04-20`.
 3. Đọc mảng `limits[]`. Mỗi phần tử có `kind` (`session`, `weekly_all`, `weekly_scoped`), `percent`, `severity`, `resets_at`.
-4. In ra định dạng SwiftBar. SwiftBar tự chạy lại mỗi 2 phút theo tên file `*.2m.py`.
+4. In ra định dạng SwiftBar.
+
+SwiftBar lấy chu kỳ chạy từ tên file. Trong repo, file tên là `claude-usage.py`. Trình cài copy nó thành
+`claude-usage.<chu kỳ>.py`, ví dụ `claude-usage.5m.py`. Khi người dùng chọn chu kỳ trong menu, SwiftBar gọi
+`claude-usage.<chu kỳ>.py --set-interval 10m`. Plugin tự đổi tên file của nó, và SwiftBar thấy thư mục đổi thì
+nạp lại với chu kỳ mới. Chọn chu kỳ khi cài bằng biến môi trường:
+
+```bash
+REFRESH=15m ./install.sh
+```
 
 Đây là endpoint nội bộ của claude.ai, chưa có tài liệu công khai. Nếu format đổi, plugin hiện `⚡?` thay vì crash.
 Mẫu response xem `docs/api-response.md`.
@@ -131,7 +147,7 @@ Plugin chỉ dùng thư viện chuẩn của Python, không có dependency ngoà
 
 ### Sửa plugin
 
-Plugin được **copy** vào thư mục plugin, không symlink. Sửa `claude-usage.2m.py` xong thì chạy lại `./install.sh`.
+Plugin được **copy** vào thư mục plugin, không symlink. Sửa `claude-usage.py` xong thì chạy lại `./install.sh`.
 
 Lý do không symlink: nếu repo nằm trong `~/Documents`, `~/Desktop` hoặc `~/Downloads`, macOS chặn SwiftBar
 đọc file qua symlink (`Operation not permitted`), và SwiftBar hiện dấu `?`.
@@ -150,7 +166,7 @@ Nó khởi động lại SwiftBar thay thế.
 claude-usage/
 ├── README.md
 ├── docs/api-response.md   # mẫu response thực tế, đã che token
-├── claude-usage.2m.py     # plugin SwiftBar
+├── claude-usage.py        # plugin SwiftBar, trình cài gắn chu kỳ vào tên khi copy
 ├── install.sh             # trình cài chính, chạy được cả qua curl | bash
 ├── install.command        # bấm đúp trong Finder để cài
 └── uninstall.command      # bấm đúp trong Finder để gỡ

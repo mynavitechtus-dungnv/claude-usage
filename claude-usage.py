@@ -13,6 +13,7 @@ Không có dependency ngoài stdlib.
 """
 import json
 import os
+import re
 import subprocess
 import sys
 import urllib.error
@@ -25,6 +26,33 @@ USAGE_PAGE = "https://claude.ai/settings/usage"
 TIMEOUT = 10
 ICON = "⚡"
 WEEKDAYS = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"]
+# Chu kỳ làm mới cho người dùng chọn. SwiftBar đọc chu kỳ từ tên file: claude-usage.<chu kỳ>.py
+INTERVALS = [("2m", "2 phút"), ("5m", "5 phút"), ("10m", "10 phút"), ("15m", "15 phút"), ("30m", "30 phút")]
+NAME_RE = re.compile(r"^claude-usage\.(\d+[smhd])\.py$")
+
+
+def self_path():
+    return os.environ.get("SWIFTBAR_PLUGIN_PATH") or os.path.abspath(__file__)
+
+
+def current_interval():
+    m = NAME_RE.match(os.path.basename(self_path()))
+    return m.group(1) if m else None
+
+
+def set_interval(value):
+    """Đổi chu kỳ bằng cách đổi tên file plugin. SwiftBar thấy thư mục thay đổi và tự nạp lại."""
+    if value not in dict(INTERVALS):
+        print(f"Chu kỳ không hợp lệ: {value}. Chọn một trong: {', '.join(k for k, _ in INTERVALS)}", file=sys.stderr)
+        sys.exit(2)
+    src = self_path()
+    if not NAME_RE.match(os.path.basename(src)):
+        print(f"Tên file không đúng dạng claude-usage.<chu kỳ>.py: {src}", file=sys.stderr)
+        sys.exit(2)
+    dst = os.path.join(os.path.dirname(src), f"claude-usage.{value}.py")
+    if dst != src:
+        os.rename(src, dst)
+    sys.exit(0)
 
 
 LOG_FILE = os.path.expanduser("~/Library/Logs/claude-usage.log")
@@ -253,9 +281,17 @@ def main():
 
     print("---")
     print(f"Cập nhật lúc {datetime.now().strftime('%H:%M')} | size=11 color=gray")
-    print("Làm mới | refresh=true")
+    print("Làm mới ngay | refresh=true")
+    cur = current_interval()
+    print(f"Tự làm mới mỗi {dict(INTERVALS).get(cur, cur or '?')}")
+    path = self_path().replace('"', '\\"')
+    for key, label in INTERVALS:
+        mark = " checked=true" if key == cur else ""
+        print(f'--{label} | bash="{path}" param1=--set-interval param2={key} terminal=false{mark}')
     print(f"Mở claude.ai/settings/usage | href={USAGE_PAGE}")
 
 
 if __name__ == "__main__":
+    if len(sys.argv) == 3 and sys.argv[1] == "--set-interval":
+        set_interval(sys.argv[2])
     main()
