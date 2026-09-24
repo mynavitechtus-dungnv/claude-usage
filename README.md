@@ -25,6 +25,12 @@ Mốc đang dùng có dấu tích. Lựa chọn được giữ nguyên khi cài 
 
 Muốn xem số mới ngay mà không đợi, bấm **Làm mới ngay**.
 
+## Đổi ngôn ngữ
+
+Bấm vào số trên thanh menu, chọn **Ngôn ngữ (Language)**, rồi chọn **Tiếng Việt, English, 日本語, 한국어 hoặc 简体中文**.
+Menu vẽ lại ngay bằng ngôn ngữ mới. Mặc định là tiếng Việt. Lựa chọn lưu ở
+`~/Library/Application Support/claude-usage/language`, nên cài lại hoặc cập nhật vẫn giữ.
+
 ## Trước khi cài
 
 Bạn cần **Claude Code** đã đăng nhập trên máy. Plugin đọc thông tin đăng nhập mà Claude Code lưu trong Keychain.
@@ -139,6 +145,10 @@ nạp lại với chu kỳ mới. Chọn chu kỳ khi cài bằng biến môi tr
 ```bash
 REFRESH=15m ./install.sh
 ```
+
+Ngôn ngữ chọn trong menu được SwiftBar gọi bằng `claude-usage.<chu kỳ>.py --set-lang <mã>`
+(`vi`, `en`, `ja`, `ko`, `zh`). Plugin ghi mã vào `~/Library/Application Support/claude-usage/language`,
+rồi SwiftBar chạy lại plugin nhờ `refresh=true`. Mọi chuỗi hiển thị nằm trong bảng `STRINGS` đầu file.
 
 Đây là endpoint nội bộ của claude.ai, chưa có tài liệu công khai. Nếu format đổi, plugin hiện `⚡?` thay vì crash.
 Mẫu response xem `docs/api-response.md`.
