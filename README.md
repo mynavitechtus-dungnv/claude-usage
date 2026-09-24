@@ -1,125 +1,128 @@
-# Claude Usage trên thanh menu macOS
+**English** | [Tiếng Việt](README.vi.md)
 
-Hiện mức dùng Claude của bạn ngay trên thanh menu, tự cập nhật theo chu kỳ bạn chọn (mặc định 5 phút).
+# Claude Usage in the macOS menu bar
+
+Shows your Claude usage right in the menu bar and refreshes it on the interval you choose (5 minutes by default).
 
 ```
 ⚡16% · 42%
 ```
 
-- **Số đầu** là mức dùng trong phiên 5 giờ hiện tại.
-- **Số sau** là mức dùng trong tuần.
-- **Bấm vào** để xem giờ reset của từng giới hạn và còn bao lâu nữa.
+- **The first number** is your usage in the current 5-hour session.
+- **The second number** is your usage for the week.
+- **Click it** to see when each limit resets and how long is left.
 
 ```
-Session 5h     16%   reset 13:40 (còn 3h34m)
-Tuần           42%   reset CN 27/09 16:59 (còn 4d 6h)  ●
-Tuần (Fable)   42%   reset CN 27/09 16:59 (còn 4d 6h)
+Session 5h     16%   reset 13:40 (3h34m left)
+Week           42%   reset Sun 27/09 16:59 (4d 6h left)  ●
+Week (Fable)   42%   reset Sun 27/09 16:59 (4d 6h left)
 ```
 
-Dấu ● đánh dấu giới hạn đang có hiệu lực. Chữ chuyển cam khi sắp chạm giới hạn và đỏ khi đã chạm.
+The ● marks the limit currently in effect. Text turns orange when you are close to a limit and red once you hit it.
 
-## Đổi thời gian tự làm mới
+## Change the language
 
-Bấm vào số trên thanh menu, chọn **Tự làm mới mỗi...**, rồi chọn **2, 5, 10, 15 hoặc 30 phút**.
-Mốc đang dùng có dấu tích. Lựa chọn được giữ nguyên khi cài lại hoặc cập nhật.
+The menu is in Vietnamese by default. Click the number in the menu bar, choose **Ngôn ngữ (Language)**, then pick
+**Tiếng Việt, English, 日本語, 한국어 or 简体中文**. The menu redraws right away in the new language. Your choice is stored
+in `~/Library/Application Support/claude-usage/language`, so it survives reinstalls and updates.
 
-Muốn xem số mới ngay mà không đợi, bấm **Làm mới ngay**.
+## Change the refresh interval
 
-## Đổi ngôn ngữ
+Click the number in the menu bar, choose **Auto-refresh every...**, then pick **2, 5, 10, 15 or 30 min**.
+The current interval has a check mark. Your choice is kept when you reinstall or update.
 
-Bấm vào số trên thanh menu, chọn **Ngôn ngữ (Language)**, rồi chọn **Tiếng Việt, English, 日本語, 한국어 hoặc 简体中文**.
-Menu vẽ lại ngay bằng ngôn ngữ mới. Mặc định là tiếng Việt. Lựa chọn lưu ở
-`~/Library/Application Support/claude-usage/language`, nên cài lại hoặc cập nhật vẫn giữ.
+To see fresh numbers without waiting, click **Refresh now**.
 
-## Trước khi cài
+## Before you install
 
-Bạn cần **Claude Code** đã đăng nhập trên máy. Plugin đọc thông tin đăng nhập mà Claude Code lưu trong Keychain.
+You need **Claude Code** installed and logged in on this Mac. The plugin reads the login credentials that Claude Code stores in the Keychain.
 
-Kiểm tra nhanh: mở Terminal, gõ `claude`. Nếu nó hỏi đăng nhập thì gõ `/login` và làm theo.
-Nếu máy chưa có Claude Code, cài theo hướng dẫn tại <https://code.claude.com/docs/en/setup>.
+Quick check: open Terminal and type `claude`. If it asks you to log in, type `/login` and follow the steps.
+If you don't have Claude Code yet, install it from <https://code.claude.com/docs/en/setup>.
 
-Plugin không dùng được nếu bạn chỉ dùng Claude trên web hoặc app desktop mà không có Claude Code.
+The plugin does not work if you only use Claude on the web or in the desktop app without Claude Code.
 
-## Cài đặt
+## Install
 
-### Cách 1: dán một lệnh vào Terminal (khuyên dùng)
+### Option 1: paste one command into Terminal (recommended)
 
-1. Mở **Terminal**: bấm `⌘ Space`, gõ `Terminal`, Enter.
-2. Dán lệnh dưới đây rồi Enter:
+1. Open **Terminal**: press `⌘ Space`, type `Terminal`, press Enter.
+2. Paste the command below and press Enter:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/mynavitechtus-dungnv/claude-usage/main/install.sh | bash
 ```
 
-3. Đợi chữ **Hoàn tất**. Nhìn lên thanh menu phía trên bên phải.
+3. Wait until it prints **Hoàn tất** (Done). Look at the top right of the menu bar.
 
-### Cách 2: tải về và bấm đúp
+### Option 2: download and double-click
 
-1. Trên trang GitHub, bấm nút xanh **Code** rồi **Download ZIP**.
-2. Mở file zip vừa tải để giải nén.
-3. Trong thư mục vừa giải nén, **bấm đúp `install.command`**. Một cửa sổ Terminal mở ra và tự cài.
+1. On the GitHub page, click the green **Code** button, then **Download ZIP**.
+2. Open the downloaded zip file to extract it.
+3. In the extracted folder, **double-click `install.command`**. A Terminal window opens and installs everything.
 
-Nếu macOS báo không mở được `install.command` vì chưa xác minh được nhà phát triển:
+If macOS says it cannot open `install.command` because the developer cannot be verified:
 
-- Đóng thông báo.
-- Mở **System Settings → Privacy & Security**, cuộn xuống, bấm **Open Anyway** cạnh dòng `install.command`.
-- Bấm đúp `install.command` lần nữa rồi chọn **Open**.
+- Close the message.
+- Open **System Settings → Privacy & Security**, scroll down, and click **Open Anyway** next to `install.command`.
+- Double-click `install.command` again and choose **Open**.
 
-Thông báo này xuất hiện vì file tải từ Internet chưa được Apple ký. Cách 1 không gặp bước này.
+This message appears because files downloaded from the Internet are not signed by Apple. Option 1 skips this step.
 
-### Trình cài làm gì
+### What the installer does
 
-| Bước | Việc làm |
+| Step | Action |
 |---|---|
-| 1 | Kiểm tra Python 3. Nếu máy chưa có Command Line Tools, mở hộp thoại cài của Apple rồi dừng, cài xong chạy lại. |
-| 2 | Kiểm tra Claude Code đã đăng nhập chưa. Chưa thì chỉ cảnh báo, vẫn cài tiếp. |
-| 3 | Cài [SwiftBar](https://swiftbar.app), app miễn phí mã nguồn mở để hiện nội dung lên thanh menu. Dùng Homebrew nếu có, không thì tải bản chính thức v2.1.1 từ GitHub. |
-| 4 | Copy plugin vào `~/.swiftbar-plugins`, giữ chu kỳ làm mới đã chọn trước đó, và ẩn chữ "SwiftBar" trên thanh menu, chỉ để lại số liệu Claude. |
-| 5 | Mở SwiftBar và thêm nó vào Login Items để tự chạy khi bật máy. |
+| 1 | Checks for Python 3. If Command Line Tools are missing, it opens Apple's install dialog and stops. Run it again after that finishes. |
+| 2 | Checks that Claude Code is logged in. If not, it only warns and keeps going. |
+| 3 | Installs [SwiftBar](https://swiftbar.app), a free open-source app that shows content in the menu bar. Uses Homebrew if available, otherwise downloads the official v2.1.1 release from GitHub. |
+| 4 | Copies the plugin to `~/.swiftbar-plugins`, keeps the refresh interval you chose before, and hides the "SwiftBar" label in the menu bar so only the Claude numbers remain. |
+| 5 | Opens SwiftBar and adds it to Login Items so it starts when you log in. |
 
-Chạy lại trình cài bao nhiêu lần cũng được. Lần sau chính là cập nhật lên bản mới.
+You can run the installer as many times as you like. Running it again updates to the latest version.
 
-### Các hộp thoại macOS có thể hỏi
+### macOS dialogs you may see
 
-| Hộp thoại | Chọn |
+| Dialog | Choose |
 |---|---|
-| SwiftBar muốn truy cập Keychain "Claude Code-credentials" | **Always Allow** |
-| Terminal muốn điều khiển "System Events" | **OK** (để thêm SwiftBar vào Login Items) |
-| Cài Command Line Tools | **Install** |
+| SwiftBar wants to access the Keychain item "Claude Code-credentials" | **Always Allow** |
+| Terminal wants to control "System Events" | **OK** (to add SwiftBar to Login Items) |
+| Install Command Line Tools | **Install** |
 
-## Gỡ cài đặt
+## Uninstall
 
-- Bấm đúp **`uninstall.command`**, hoặc
-- Dán vào Terminal:
+- Double-click **`uninstall.command`**, or
+- Paste into Terminal:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/mynavitechtus-dungnv/claude-usage/main/install.sh | bash -s -- --uninstall
 ```
 
-Lệnh gỡ chỉ xoá plugin. Muốn bỏ hẳn SwiftBar thì kéo `SwiftBar.app` trong Applications vào Thùng rác, và xoá nó khỏi System Settings → General → Login Items.
+This only removes the plugin. To remove SwiftBar completely, drag `SwiftBar.app` from Applications to the Trash and
+remove it from System Settings → General → Login Items.
 
-## Khi thấy `⚡?`
+## When you see `⚡?`
 
-Bấm vào `⚡?` để xem lý do. Lỗi cũng được ghi vào `~/Library/Logs/claude-usage.log`.
+Click `⚡?` to see the reason. Errors are also written to `~/Library/Logs/claude-usage.log`.
 
-| Lý do hiện ra | Cách sửa |
+| Reason shown | Fix |
 |---|---|
-| Chưa đăng nhập Claude Code | Mở Terminal, gõ `claude`, rồi `/login` |
-| API trả HTTP 401 | Token hết hạn. Mở Terminal, gõ `claude` một lần để nó tự làm mới |
-| Không gọi được API | Kiểm tra mạng |
-| Khác | Mở issue trên GitHub, dán nội dung file log |
+| Not logged in to Claude Code | Open Terminal, type `claude`, then `/login` |
+| API returned HTTP 401 | The token expired. Open Terminal and type `claude` once so it refreshes |
+| Cannot reach the API | Check your network |
+| Anything else | Open an issue on GitHub and paste the log file |
 
-## Thoát SwiftBar
+## Quit SwiftBar
 
-Thanh menu chỉ hiện số liệu Claude. Lúc mới bật máy, chữ "SwiftBar" có thể hiện vài giây rồi tự ẩn.
+The menu bar shows only the Claude numbers. Right after startup, the "SwiftBar" label may show for a few seconds before it hides.
 
-Muốn thoát SwiftBar, dán vào Terminal:
+To quit SwiftBar, paste into Terminal:
 
 ```bash
 osascript -e 'quit app "SwiftBar"'
 ```
 
-Muốn hiện lại chữ "SwiftBar":
+To show the "SwiftBar" label again:
 
 ```bash
 defaults delete com.ameba.SwiftBar StealthMode
@@ -127,57 +130,58 @@ defaults delete com.ameba.SwiftBar StealthMode
 
 ---
 
-## Dành cho người phát triển
+## For developers
 
-### Cách hoạt động
+### How it works
 
-1. Đọc token OAuth mà Claude Code lưu trong Keychain,
+1. Reads the OAuth token that Claude Code stores in the Keychain,
    item `Claude Code-credentials`, field `claudeAiOauth.accessToken`.
-2. Gọi `GET https://api.anthropic.com/api/oauth/usage` với header `anthropic-beta: oauth-2025-04-20`.
-3. Đọc mảng `limits[]`. Mỗi phần tử có `kind` (`session`, `weekly_all`, `weekly_scoped`), `percent`, `severity`, `resets_at`.
-4. In ra định dạng SwiftBar.
+2. Calls `GET https://api.anthropic.com/api/oauth/usage` with the header `anthropic-beta: oauth-2025-04-20`.
+3. Reads the `limits[]` array. Each element has `kind` (`session`, `weekly_all`, `weekly_scoped`), `percent`, `severity`, `resets_at`.
+4. Prints it in SwiftBar format.
 
-SwiftBar lấy chu kỳ chạy từ tên file. Trong repo, file tên là `claude-usage.py`. Trình cài copy nó thành
-`claude-usage.<chu kỳ>.py`, ví dụ `claude-usage.5m.py`. Khi người dùng chọn chu kỳ trong menu, SwiftBar gọi
-`claude-usage.<chu kỳ>.py --set-interval 10m`. Plugin tự đổi tên file của nó, và SwiftBar thấy thư mục đổi thì
-nạp lại với chu kỳ mới. Chọn chu kỳ khi cài bằng biến môi trường:
+SwiftBar takes the run interval from the file name. In the repo the file is `claude-usage.py`. The installer copies it as
+`claude-usage.<interval>.py`, for example `claude-usage.5m.py`. When the user picks an interval in the menu, SwiftBar calls
+`claude-usage.<interval>.py --set-interval 10m`. The plugin renames its own file, and SwiftBar sees the folder change and
+reloads it with the new interval. To choose the interval at install time, use an environment variable:
 
 ```bash
 REFRESH=15m ./install.sh
 ```
 
-Ngôn ngữ chọn trong menu được SwiftBar gọi bằng `claude-usage.<chu kỳ>.py --set-lang <mã>`
-(`vi`, `en`, `ja`, `ko`, `zh`). Plugin ghi mã vào `~/Library/Application Support/claude-usage/language`,
-rồi SwiftBar chạy lại plugin nhờ `refresh=true`. Mọi chuỗi hiển thị nằm trong bảng `STRINGS` đầu file.
+The language chosen in the menu is applied by SwiftBar calling `claude-usage.<interval>.py --set-lang <code>`
+(`vi`, `en`, `ja`, `ko`, `zh`). The plugin writes the code to `~/Library/Application Support/claude-usage/language`,
+then SwiftBar reruns the plugin thanks to `refresh=true`. All displayed strings live in the `STRINGS` table at the top of the file.
 
-Đây là endpoint nội bộ của claude.ai, chưa có tài liệu công khai. Nếu format đổi, plugin hiện `⚡?` thay vì crash.
-Mẫu response xem `docs/api-response.md`.
+This is an internal claude.ai endpoint with no public documentation. If the format changes, the plugin shows `⚡?` instead of crashing.
+See `docs/api-response.md` for a sample response.
 
-Plugin chỉ dùng thư viện chuẩn của Python, không có dependency ngoài. Token chỉ gửi tới `api.anthropic.com`.
+The plugin uses only the Python standard library, with no external dependencies. The token is only sent to `api.anthropic.com`.
 
-### Sửa plugin
+### Editing the plugin
 
-Plugin được **copy** vào thư mục plugin, không symlink. Sửa `claude-usage.py` xong thì chạy lại `./install.sh`.
+The plugin is **copied** into the plugin folder, not symlinked. After editing `claude-usage.py`, run `./install.sh` again.
 
-Lý do không symlink: nếu repo nằm trong `~/Documents`, `~/Desktop` hoặc `~/Downloads`, macOS chặn SwiftBar
-đọc file qua symlink (`Operation not permitted`), và SwiftBar hiện dấu `?`.
+Why no symlink: if the repo lives in `~/Documents`, `~/Desktop` or `~/Downloads`, macOS blocks SwiftBar from reading
+the file through a symlink (`Operation not permitted`), and SwiftBar shows `?`.
 
-Ẩn chữ "SwiftBar" cần hai lớp. Trình cài bật `StealthMode`. Nhưng SwiftBar 2.1.1 trên macOS 26 bỏ qua lệnh ẩn
-lúc khởi động, nên chữ đó vẫn hiện. Nó chỉ ẩn khi SwiftBar quét lại thư mục plugin. Vì vậy, lần chạy đầu tiên sau mỗi
-lần SwiftBar khởi động, plugin tạo rồi xoá một file ẩn trong thư mục plugin để ép SwiftBar quét lại. Plugin nhận biết lần
-khởi động qua biến `SWIFTBAR_LAUNCH_TIME`. Xem hàm `hide_swiftbar_fallback_item`.
+Hiding the "SwiftBar" label takes two layers. The installer turns on `StealthMode`. But SwiftBar 2.1.1 on macOS 26 ignores
+the hide setting at startup, so the label still shows. It only hides when SwiftBar rescans the plugin folder. So on the first
+run after each SwiftBar launch, the plugin creates and deletes a hidden file in the plugin folder to force a rescan. The plugin
+detects a launch through the `SWIFTBAR_LAUNCH_TIME` variable. See the `hide_swiftbar_fallback_item` function.
 
-Trình cài không gọi URL `swiftbar://refreshallplugins`, vì SwiftBar 2.1.1 crash khi nhận URL này.
-Nó khởi động lại SwiftBar thay thế.
+The installer does not call the `swiftbar://refreshallplugins` URL, because SwiftBar 2.1.1 crashes on it.
+It restarts SwiftBar instead.
 
-### Cấu trúc
+### Layout
 
 ```
 claude-usage/
-├── README.md
-├── docs/api-response.md   # mẫu response thực tế, đã che token
-├── claude-usage.py        # plugin SwiftBar, trình cài gắn chu kỳ vào tên khi copy
-├── install.sh             # trình cài chính, chạy được cả qua curl | bash
-├── install.command        # bấm đúp trong Finder để cài
-└── uninstall.command      # bấm đúp trong Finder để gỡ
+├── README.md              # English
+├── README.vi.md           # Tiếng Việt
+├── docs/api-response.md   # real sample response, token redacted
+├── claude-usage.py        # SwiftBar plugin; the installer adds the interval to its name when copying
+├── install.sh             # main installer, also works via curl | bash
+├── install.command        # double-click in Finder to install
+└── uninstall.command      # double-click in Finder to uninstall
 ```
