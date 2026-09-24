@@ -24,7 +24,8 @@ KEYCHAIN_SERVICE = "Claude Code-credentials"
 USAGE_URL = "https://api.anthropic.com/api/oauth/usage"
 USAGE_PAGE = "https://claude.ai/settings/usage"
 TIMEOUT = 10
-ICON = "⚡"
+ICON = " ⚡️ "
+ICON_CALENDAR = " 🗓️ "
 WEEKDAYS = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"]
 # Chu kỳ làm mới cho người dùng chọn. SwiftBar đọc chu kỳ từ tên file: claude-usage.<chu kỳ>.py
 INTERVALS = [("2m", "2 phút"), ("5m", "5 phút"), ("10m", "10 phút"), ("15m", "15 phút"), ("30m", "30 phút")]
@@ -255,7 +256,7 @@ def main():
     for r in rows:
         if r["severity"] not in (None, "normal"):
             worst = r["severity"] if worst == "normal" or r["severity"] != "warning" else worst
-    title = f"{ICON}{' · '.join(parts)}"
+    title = f"{ICON}{ICON_CALENDAR.join(parts)}"
     c = color_for(worst)
     print(f"{title} | font=Menlo{' color=' + c if c else ''}")
     print("---")
